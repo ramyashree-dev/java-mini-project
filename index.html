@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .box {
+            background: white;
+            padding: 15px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #aaa;
+        }
+        th, td {
+            padding: 6px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Library Management System</h1>
+
+<div class="container">
+
+    <!-- BOOK MANAGEMENT -->
+    <div class="box">
+        <h2>Add Book</h2>
+        <input id="bookId" placeholder="Book ID">
+        <input id="bookName" placeholder="Book Name">
+        <input id="bookAuthor" placeholder="Author">
+        <button onclick="addBook()">Add Book</button>
+        <table>
+            <tr><th>ID</th><th>Name</th></tr>
+            <tbody id="bookTable"></tbody>
+        </table>
+    </div>
+
+    <!-- MEMBER MANAGEMENT -->
+    <div class="box">
+        <h2>Add Member</h2>
+        <input id="memberId" placeholder="Member ID">
+        <input id="memberName" placeholder="Member Name">
+        <button onclick="addMember()">Add Member</button>
+        <table>
+            <tr><th>ID</th><th>Name</th></tr>
+            <tbody id="memberTable"></tbody>
+        </table>
+    </div>
+
+    <!-- BORROWING -->
+    <div class="box">
+        <h2>Issue Book</h2>
+        <input id="issueBookId" placeholder="Book ID">
+        <input id="issueMemberId" placeholder="Member ID">
+        <button onclick="issueBook()">Issue Book</button>
+        <table>
+            <tr><th>Book ID</th><th>Member ID</th></tr>
+            <tbody id="issueTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+    let members = JSON.parse(localStorage.getItem("members")) || [];
+    let issues = JSON.parse(localStorage.getItem("issues")) || [];
+
+    window.onload = function () {
+        showBooks();
+        showMembers();
+        showIssues();
+    };
+
+    // ---------- BOOK ----------
+    function addBook() {
+        let id = document.getElementById("bookId").value;
+        let name = document.getElementById("bookName").value;
+
+        books.push({ id, name });
+        localStorage.setItem("books", JSON.stringify(books));
+        showBooks();
+
+        document.getElementById("bookId").value = "";
+        document.getElementById("bookName").value = "";
+        document.getElementById("bookAuthor").value = "";
+    }
+
+    function showBooks() {
+        let table = document.getElementById("bookTable");
+        table.innerHTML = "";
+        books.forEach(b => {
+            table.innerHTML += `<tr><td>${b.id}</td><td>${b.name}</td></tr>`;
+        });
+    }
+
+    // ---------- MEMBER ----------
+    function addMember() {
+        let id = document.getElementById("memberId").value;
+        let name = document.getElementById("memberName").value;
+
+        members.push({ id, name });
+        localStorage.setItem("members", JSON.stringify(members));
+        showMembers();
+
+        document.getElementById("memberId").value = "";
+        document.getElementById("memberName").value = "";
+    }
+
+    function showMembers() {
+        let table = document.getElementById("memberTable");
+        table.innerHTML = "";
+        members.forEach(m => {
+            table.innerHTML += `<tr><td>${m.id}</td><td>${m.name}</td></tr>`;
+        });
+    }
+
+    // ---------- ISSUE ----------
+    function issueBook() {
+        let book = document.getElementById("issueBookId").value;
+        let member = document.getElementById("issueMemberId").value;
+
+        issues.push({ book, member });
+        localStorage.setItem("issues", JSON.stringify(issues));
+        showIssues();
+
+        document.getElementById("issueBookId").value = "";
+        document.getElementById("issueMemberId").value = "";
+    }
+
+    function showIssues() {
+        let table = document.getElementById("issueTable");
+        table.innerHTML = "";
+        issues.forEach(i => {
+            table.innerHTML += `<tr><td>${i.book}</td><td>${i.member}</td></tr>`;
+        });
+    }
+</script>
+
+</body>
+</html>
